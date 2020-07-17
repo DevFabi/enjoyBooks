@@ -17,6 +17,10 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
+    App\Service\GoogleAPI\UrlGenerator:
+        arguments:
+            - '%env(API_GOOGLE_KEY)%'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:

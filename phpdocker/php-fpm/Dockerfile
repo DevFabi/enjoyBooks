@@ -6,5 +6,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install  php-pgsql php-xdebug php-amqp \
+    && apt-get -y --no-install-recommends install  php-mysql php-xdebug php-amqp cron \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+

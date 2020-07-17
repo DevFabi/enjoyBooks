@@ -10,7 +10,7 @@ services:
         - MYSQL_ROOT_PASSWORD=adminrootpass
         - MYSQL_USER=admin
         - MYSQL_PASSWORD=adminpass
-        - MYSQL_DATABASE=game
+        - MYSQL_DATABASE=enjoybooks
       ports:
         - "3306:3306"
 

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Books</h1>
+    </div>
+<div class="container">
+<div class="row">
+    {% for book in books %}
+    <div class="col-md-6">
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img src="{{book.image}}" class="card-img" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{book.title}}</h5>
+                    <p class="card-text">{{book.description|u.truncate(300, '...')}}</p>
+                    <p class="card-text"><small class="text-muted">{{book.publishedDate|date("d/m/Y")}}</small></p>
+                    <span class="badge badge-pill badge-light">{{book.authors.name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
+    {{ knp_pagination_render(books) }}
+</div>
+</div>
+{% endblock %}
