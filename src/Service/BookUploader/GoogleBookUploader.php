@@ -1,30 +1,18 @@
 <?php
 
 
-namespace App\Service\GoogleAPI;
+namespace App\Service\BookUploader;
 
 
 use App\Entity\Book;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class UploadBooks
+class GoogleBookUploader extends AbstractBookUploader
 {
-    private $client;
-    private $em;
-    private $urlGenerator;
-
-    /**
-     * UploadBooks constructor.
-     * @param UrlGenerator $urlGenerator
-     * @param HttpClientInterface $client
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(UrlGenerator $urlGenerator, HttpClientInterface $client, EntityManagerInterface $em)
+    public function __construct(string $url, string $key, HttpClientInterface $client, EntityManagerInterface $em)
     {
-        $this->client = $client;
-        $this->em = $em;
-        $this->urlGenerator = $urlGenerator;
+        parent::__construct($url, $key, $client, $em);
     }
 
     public function getAllBooks(Array $authors) {
@@ -32,7 +20,7 @@ class UploadBooks
         $books = [];
 
         foreach ($authors as $author){
-            $url = $this->urlGenerator->createGoogleUrl($author->getName());
+            $url = $this->createUrl($author->getName());
 
             $response = $this->client->request(
                 'GET',

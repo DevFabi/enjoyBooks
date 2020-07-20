@@ -6,7 +6,7 @@ namespace App\Command;
 
 use App\Service\Authors\GetListOfAuthors;
 use App\Service\Books\SaveBook;
-use App\Service\GoogleAPI\UploadBooks;
+use App\Service\BookUploader\BookUploaderInterface;
 use App\Service\Notification\NotifiedUser;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +19,6 @@ class UpdateBooksCommand extends Command
 {
     protected static $defaultName = 'app:update-books';
 
-    private $getListOfBooks;
     private $em;
     private $saveBook;
     /**
@@ -34,19 +33,23 @@ class UpdateBooksCommand extends Command
      * @var NotifiedUser
      */
     private $notifiedUser;
+    /**
+     * @var BookUploaderInterface
+     */
+    private $bookUploader;
 
     /**
      * UpdateBooksCommand constructor.
-     * @param UploadBooks $getListOfBooks
+     * @param BookUploaderInterface $bookUploader
      * @param EntityManagerInterface $em
      * @param SaveBook $saveBook
      * @param GetListOfAuthors $listOfAuthors
      * @param MessageBusInterface $bus
      * @param NotifiedUser $notifiedUser
      */
-    public function __construct(UploadBooks $getListOfBooks, EntityManagerInterface $em, SaveBook $saveBook, GetListOfAuthors $listOfAuthors, MessageBusInterface $bus, NotifiedUser $notifiedUser)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook, GetListOfAuthors $listOfAuthors, MessageBusInterface $bus, NotifiedUser $notifiedUser)
     {
-        $this->getListOfBooks = $getListOfBooks;
+        $this->bookUploader = $bookUploader;
         $this->em = $em;
         $this->saveBook = $saveBook;
         parent::__construct();
@@ -77,7 +80,7 @@ class UpdateBooksCommand extends Command
         $authors = $this->listOfAuthors->getAuthors();
 
         // Get all books which are not in database
-        $books = $this->getListOfBooks->getAllBooks($authors);
+        $books = $this->bookUploader->getAllBooks($authors);
 
         $output->writeln(count($books).' books (not saved)');
 

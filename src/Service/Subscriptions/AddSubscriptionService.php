@@ -34,6 +34,7 @@ class AddSubscriptionService
 
         $author = $this->em->getRepository(Author::class)->findOneBy(['id' => $authorId]);
 
+        /** @var Author $author */
         $user->addSubscription($author);
 
         $this->em->persist($user);
