@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace App\Service\Subscriptions;
 
@@ -15,19 +16,12 @@ class AddSubscriptionService
      */
     private $em;
 
-    /**
-     * AddSubscriptionService constructor.
-     * @param EntityManagerInterface $em
-     */
     public function __construct(EntityManagerInterface $em )
     {
         $this->em = $em;
     }
 
-    /**
-     * @param User $user
-     * @param $data
-     */
+
     public function addSubscription(User $user, $data)
     {
         $authorId = $data['author'];

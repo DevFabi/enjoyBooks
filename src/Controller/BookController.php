@@ -29,9 +29,6 @@ class BookController extends AbstractController
 
     /**
      * @Route("/books", name="books")
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     * @return Response
      */
     public function listAllBooks(Request $request, PaginatorInterface $paginator): Response
     {
@@ -50,12 +47,8 @@ class BookController extends AbstractController
 
     /**
      * @Route("/book/{authorId}", name="bookByAuthor")
-     * @param $authorId
-     * @param Request $request
-     * @param PaginatorInterface $paginator
-     * @return Response
      */
-    public function listBooksByAuthor($authorId, Request $request, PaginatorInterface $paginator)
+    public function listBooksByAuthor($authorId, Request $request, PaginatorInterface $paginator): Response
     {
         $data = $this->listOfBooks->getBookByAuthors($authorId);
         

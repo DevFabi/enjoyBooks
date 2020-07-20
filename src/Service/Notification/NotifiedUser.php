@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace App\Service\Notification;
 
@@ -27,12 +28,6 @@ class NotifiedUser implements NotificationInterface
      */
     private $bus;
 
-    /**
-     * NotifiedUser constructor.
-     * @param EntityManagerInterface $em
-     * @param GetListOfBooks $listOfBooks
-     * @param MessageBusInterface $bus
-     */
     public function __construct(EntityManagerInterface $em, GetListOfBooks $listOfBooks, MessageBusInterface $bus)
     {
         $this->em = $em;
@@ -40,10 +35,6 @@ class NotifiedUser implements NotificationInterface
         $this->bus = $bus;
     }
 
-    /**
-     * @param DateTime $date
-     * @return int
-     */
     public function personToNotify(DateTime $date): int
     {
         $books = $this->listOfBooks->getLastBooks($date);
@@ -70,10 +61,6 @@ class NotifiedUser implements NotificationInterface
     }
 
 
-    /**
-     * @param $message
-     * @param $email
-     */
     public function dispatchNotification($message, $email)
     {
         $this->bus->dispatch(new SendNotification($message, $email), [new AmqpStamp('email')]);

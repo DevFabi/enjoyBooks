@@ -20,13 +20,6 @@ abstract class AbstractBookUploader implements BookUploaderInterface
      */
     protected $em;
 
-    /**
-     * AbstractBookUploader constructor.
-     * @param string $url
-     * @param string $key
-     * @param HttpClientInterface $client
-     * @param EntityManagerInterface $em
-     */
     public function __construct(string $url, string $key, HttpClientInterface $client, EntityManagerInterface $em)
     {
         $this->url = $url;

@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
-use App\Service\Authors\GetListOfAuthors;
+use App\Entity\Author;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AuthorController extends AbstractController
@@ -12,24 +13,19 @@ class AuthorController extends AbstractController
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
-    /**
-     * @var GetListOfAuthors
-     */
-    private $listOfAuthors;
+    private $em;
 
-    public function __construct(EntityManagerInterface $entityManager, GetListOfAuthors $listOfAuthors)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->entityManager = $entityManager;
-        $this->listOfAuthors = $listOfAuthors;
+        $this->em = $em;
     }
 
     /**
      * @Route("/author", name="author")
      */
-    public function listAuthors()
+    public function listAuthors(): Response
     {
-        $authors = $this->listOfAuthors->getAuthors();
+        $authors = $this->em->getRepository(Author::class)->findAll();
 
         return $this->render('author/index.html.twig',
                                     ["authors" => $authors]);

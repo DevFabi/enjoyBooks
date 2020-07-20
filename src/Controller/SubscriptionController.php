@@ -4,10 +4,11 @@
 namespace App\Controller;
 
 
+use App\Entity\Author;
 use App\Form\SubscriptionFormType;
-use App\Service\Authors\GetListOfAuthors;
 use App\Service\Subscriptions\AddSubscriptionService;
 use App\Service\Subscriptions\GetUserSubscriptionService;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,37 +23,29 @@ class SubscriptionController extends AbstractController
      */
     private $userSubscriptionService;
     /**
-     * @var GetListOfAuthors
-     */
-    private $listOfAuthors;
-    /**
      * @var AddSubscriptionService
      */
     private $addSubscriptionService;
-
     /**
-     * SubscriptionController constructor.
-     * @param GetUserSubscriptionService $userSubscriptionService
-     * @param GetListOfAuthors $listOfAuthors
-     * @param AddSubscriptionService $addSubscriptionService
+     * @var EntityManagerInterface
      */
-    public function __construct(GetUserSubscriptionService $userSubscriptionService, GetListOfAuthors $listOfAuthors, AddSubscriptionService $addSubscriptionService)
+    private $em;
+
+    public function __construct(EntityManagerInterface $em, GetUserSubscriptionService $userSubscriptionService, AddSubscriptionService $addSubscriptionService)
     {
         $this->userSubscriptionService = $userSubscriptionService;
-        $this->listOfAuthors = $listOfAuthors;
         $this->addSubscriptionService = $addSubscriptionService;
+        $this->em = $em;
     }
 
     /**
      * @Route("/subscription/{userId}", name="subscription")
-     * @param $userId
-     * @return Response
      * @IsGranted("ROLE_USER")
      */
     public function getSubscriptions($userId): Response
     {
         $subscriptions = $this->userSubscriptionService->getUserSubscriptions($userId);
-        $authors = $this->listOfAuthors->getAuthors();
+        $authors = $this->em->getRepository(Author::class)->findAll();
 
         return $this->render('subscription/subscription.html.twig',
                                    ["subscriptions" => $subscriptions,
@@ -61,13 +54,11 @@ class SubscriptionController extends AbstractController
 
     /**
      * @Route("/postSubscription", name="post_subscription")
-     * @param Request $request
-     * @return Response
      * @IsGranted("ROLE_USER")
      */
     public function post(Request $request): Response
     {
-        $authors = $this->listOfAuthors->getAuthors();
+        $authors = $this->em->getRepository(Author::class)->findAll();
 
         $nameAuthors = [];
         foreach ($authors as $author){

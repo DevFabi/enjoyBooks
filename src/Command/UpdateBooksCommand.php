@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types = 1);
 
 namespace App\Command;
 
 
-use App\Service\Authors\GetListOfAuthors;
+use App\Entity\Author;
 use App\Service\Books\SaveBook;
 use App\Service\BookUploader\BookUploaderInterface;
 use App\Service\Notification\NotifiedUser;
@@ -22,10 +22,6 @@ class UpdateBooksCommand extends Command
     private $em;
     private $saveBook;
     /**
-     * @var GetListOfAuthors
-     */
-    private $listOfAuthors;
-    /**
      * @var MessageBusInterface
      */
     private $bus;
@@ -38,22 +34,12 @@ class UpdateBooksCommand extends Command
      */
     private $bookUploader;
 
-    /**
-     * UpdateBooksCommand constructor.
-     * @param BookUploaderInterface $bookUploader
-     * @param EntityManagerInterface $em
-     * @param SaveBook $saveBook
-     * @param GetListOfAuthors $listOfAuthors
-     * @param MessageBusInterface $bus
-     * @param NotifiedUser $notifiedUser
-     */
-    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook, GetListOfAuthors $listOfAuthors, MessageBusInterface $bus, NotifiedUser $notifiedUser)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook,  MessageBusInterface $bus, NotifiedUser $notifiedUser)
     {
         $this->bookUploader = $bookUploader;
         $this->em = $em;
         $this->saveBook = $saveBook;
         parent::__construct();
-        $this->listOfAuthors = $listOfAuthors;
         $this->bus = $bus;
         $this->notifiedUser = $notifiedUser;
     }
@@ -66,18 +52,13 @@ class UpdateBooksCommand extends Command
         ;
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     * @throws \Exception
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) :int
     {
         $date = new DateTime('now');
         $output->writeln(date_format($date, 'd/m/Y H:i:s').' : command launch');
         // Get all authors
-        $authors = $this->listOfAuthors->getAuthors();
+        $authors = $this->em->getRepository(Author::class)->findAll();
+
 
         // Get all books which are not in database
         $books = $this->bookUploader->getAllBooks($authors);

@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace App\Service\BookUploader;
 
@@ -15,7 +16,8 @@ class GoogleBookUploader extends AbstractBookUploader
         parent::__construct($url, $key, $client, $em);
     }
 
-    public function getAllBooks(Array $authors) {
+    public function getAllBooks(Array $authors) : array
+    {
 
         $books = [];
 

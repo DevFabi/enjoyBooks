@@ -12,8 +12,6 @@ class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="login")
-     * @param AuthenticationUtils $authenticationUtils
-     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -32,7 +30,7 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="logout")
      * @throws Exception
      */
-    public function logout()
+    public function logout(): Exception
     {
         throw new Exception('Will be intercepted before getting here');
     }

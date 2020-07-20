@@ -21,11 +21,6 @@ class MailerService
         $this->mailer = $mailer;
     }
 
-    /**
-     * @param SendNotification $notification
-     * @return Email
-     * @throws TransportExceptionInterface
-     */
     public function sendNewBookNotification(SendNotification $notification): Email
     {
         $email = (new Email())
