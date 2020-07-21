@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types= 1);
 
 namespace App\Service\BookUploader;
 
@@ -30,13 +30,18 @@ abstract class AbstractBookUploader implements BookUploaderInterface
 
     public function createUrl($authorName): string
     {
-        // Replace space by +
-        $authorName = str_replace(' ', '+', $authorName);
+        $param = '%s%s';
+        $author = sprintf($param, '?q=inauthor:', str_replace(' ', '+', $authorName));
 
-        $param = "?q=inauthor:".$authorName;
-        $otherParams = "&printType=books&projection=lite&langRestrict=fr";
-        $key = "&key=".$this->key;
+        $data = [
+            'printType' => 'books',
+            'projection' => 'lite',
+            'langRestrict' => 'fr',
+            'key' => $this->key
+        ];
 
-        return $this->url.$param.$otherParams.$key;
+        $url = '%s%s%s%s';
+;
+        return sprintf($url, $this->url, $author,'&', http_build_query($data));
     }
 }
