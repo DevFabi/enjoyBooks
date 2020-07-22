@@ -58,14 +58,7 @@ class SubscriptionController extends AbstractController
      */
     public function post(Request $request): Response
     {
-        $authors = $this->em->getRepository(Author::class)->findAll();
-
-        $nameAuthors = [];
-        foreach ($authors as $author){
-            $nameAuthors[$author->getName()]= $author->getId();
-        }
-
-        $form = $this->createForm(SubscriptionFormType::class,[$nameAuthors]);
+        $form = $this->createForm(SubscriptionFormType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

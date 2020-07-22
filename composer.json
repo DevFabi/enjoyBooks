@@ -16,6 +16,7 @@
         "knpuniversity/oauth2-client-bundle": "^2.1",
         "league/oauth2-google": "^3.0",
         "sensio/framework-extra-bundle": "^5.1",
+        "stof/doctrine-extensions-bundle": "^1.4",
         "symfony/asset": "5.1.*",
         "symfony/browser-kit": "5.1.*",
         "symfony/console": "5.1.*",
