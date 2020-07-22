@@ -5,15 +5,18 @@ namespace App\Command;
 
 
 use App\Entity\Author;
+use App\Events\Events;
 use App\Service\Books\SaveBook;
 use App\Service\BookUploader\BookUploaderInterface;
-use App\Service\Notification\NotifiedUser;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
+
 
 class UpdateBooksCommand extends Command
 {
@@ -22,26 +25,21 @@ class UpdateBooksCommand extends Command
     private $em;
     private $saveBook;
     /**
-     * @var MessageBusInterface
-     */
-    private $bus;
-    /**
-     * @var NotifiedUser
-     */
-    private $notifiedUser;
-    /**
      * @var BookUploaderInterface
      */
     private $bookUploader;
+    /**
+     * @var EventDispatcher
+     */
+    private $eventDispatcher;
 
-    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook,  MessageBusInterface $bus, NotifiedUser $notifiedUser)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook,EventDispatcherInterface $eventDispatcher)
     {
         $this->bookUploader = $bookUploader;
         $this->em = $em;
         $this->saveBook = $saveBook;
         parent::__construct();
-        $this->bus = $bus;
-        $this->notifiedUser = $notifiedUser;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     protected function configure()
@@ -52,27 +50,28 @@ class UpdateBooksCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) :int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $date = new DateTime('now');
         $output->writeln(date_format($date, 'd/m/Y H:i:s').' : command launch');
-        // Get all authors
+
+        // 1/ Get all authors
         $authors = $this->em->getRepository(Author::class)->findAll();
 
-
-        // Get all books which are not in database
+        // 2/ Get all books from googleAPI which are not in database
         $books = $this->bookUploader->getAllBooks($authors);
 
         $output->writeln(count($books).' books (not saved)');
 
-        // Save in database
+        // 3/ Save books in database
         $savedBooks = $this->saveBook->save($books);
 
         $output->writeln($savedBooks.' books saved!');
 
+        // 4/ Send user subscribers
         if ($savedBooks > 0) {
-            $emailSend = $this->notifiedUser->personToNotify($date);
-            $output->writeln($emailSend.' emails send');
+            $event = new GenericEvent($date);
+            $this->eventDispatcher->dispatch($event,Events::NEW_BOOK_NOTIFY);
         }
 
         return 1;
