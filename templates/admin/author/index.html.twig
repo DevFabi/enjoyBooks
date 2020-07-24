@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin authors{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <h1 class="my-5"> Author handler</h1>
+
+        <a href="{{ path('admin_create_author') }}">
+            <button class="btn btn-outline-info">Create</button>
+        </a>
+
+        <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Actions</th>
+            </tr>
+            </thead>
+        <tbody>
+        {% for author in authors %}
+            <tr>
+            <td>{{ author.id }}</td>
+            <td>{{ author.name }}</td>
+            <td>
+                <a href="{{ path('admin_edit_author', { id : author.id }) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                <a href="{{ path('admin_delete_author', { id : author.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+            </td>
+            </tr>
+        {%  endfor %}
+        </tbody>
+    </table>
+    </div>
+        {{ knp_pagination_render(authors) }}
+    </div>
+{% endblock %}

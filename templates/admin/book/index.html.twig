@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin books{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+
+        <h1 class="my-5"> Book handler</h1>
+
+        <a href="{{ path('admin_create_book') }}">
+            <button class="btn btn-outline-info">Create book</button>
+        </a>
+        <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+            <th>Id</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Actions</th>
+            </tr>
+            </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+            <td>{{ book.id }}</td>
+            <td><img src="{{ book.image }}" alt=""></td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.authors.name }}</td>
+            <td>
+                <a href="{{ path('admin_edit_book', { id : book.id }) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit </a>
+                <a href="{{ path('admin_delete_book', { id : book.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>
+            </td>
+            </tr>
+        {%  endfor %}
+        </tbody>
+    </table>
+    </div>
+        {{ knp_pagination_render(books) }}
+    </div>
+{% endblock %}

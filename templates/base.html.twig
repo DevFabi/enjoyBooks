@@ -22,6 +22,7 @@
             <a class="nav-link" href="{{ path('logout') }}">Sign out</a>
         {% else %}
             <a class="nav-link" href="{{ path('login') }}">Connexion</a>
+            <a class="nav-link" href="{{ path('register') }}">Register</a>
     {% endif %}
         </li>
     </ul>
@@ -47,22 +48,54 @@
                         </a>
                     </li>
                 </ul>
-
+                {% if app.user %}
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span>User</span>
+                    <span style="color: green">User</span>
                     <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
                         <span data-feather="plus-circle"></span>
                     </a>
                 </h6>
                 <ul class="nav flex-column mb-2">
-                    {% if app.user %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('profile') }}">
+                            My profile
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('subscription' , {userId: app.user.getId()}) }}">
                             Subscriptions
                         </a>
                     </li>
-                    {% endif %}
                 </ul>
+                {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span style="color: red">Administration</span>
+                        <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                            <span data-feather="plus-circle"></span>
+                        </a>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin_book') }}">
+                                Books
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin_author') }}">
+                                Authors
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin_user') }}">
+                                Users
+                            </a>
+                        </li>
+                    </ul>
+                {% endif %}
             </div>
         </nav>
 
