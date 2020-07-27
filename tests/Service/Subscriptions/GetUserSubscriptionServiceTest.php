@@ -22,7 +22,7 @@ class GetUserSubscriptionServiceTest extends TestCase
         $user->setEmail('tutu@gmail.com')->setPassword('xxx')->addSubscription($author);
 
         $em = $this->getMockBuilder(EntityManagerInterface::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->setMethods(['findOneBy'])->disableOriginalConstructor()->getMock();
 
         $em->method('getRepository')->willReturn($userRepository);
 
