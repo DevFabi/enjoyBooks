@@ -50,7 +50,6 @@ class NotifiedUser implements NotificationInterface
             $message = "Author :".$author->getName()." publish a new book :".$book->getTitle();
             dump('Book title : '.$book->getTitle());
             foreach ($users as $user){
-                dump('User : '.$user->getEmail());
 
                 $this->dispatchNotification($message, $user->getEmail());
                 $emailSend++;

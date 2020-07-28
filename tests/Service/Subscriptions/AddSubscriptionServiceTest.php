@@ -8,6 +8,7 @@ use App\Repository\AuthorRepository;
 use App\Service\Subscriptions\AddSubscriptionService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class AddSubscriptionServiceTest extends TestCase
 {
@@ -29,7 +30,9 @@ class AddSubscriptionServiceTest extends TestCase
 
         $authorRepository->method('findOneBy')->willReturn($author);
 
-        $addSubscription = new AddSubscriptionService($em);
+        $log = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
+
+        $addSubscription = new AddSubscriptionService($em,$log);
 
         $addSubscription->addSubscription($user, $data);
 

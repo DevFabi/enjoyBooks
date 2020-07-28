@@ -10,6 +10,7 @@ use App\Service\Books\SaveBook;
 use App\Service\BookUploader\BookUploaderInterface;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,14 +33,19 @@ class UpdateBooksCommand extends Command
      * @var EventDispatcher
      */
     private $eventDispatcher;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
-    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook,EventDispatcherInterface $eventDispatcher)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook,EventDispatcherInterface $eventDispatcher, LoggerInterface $logger)
     {
         $this->bookUploader = $bookUploader;
         $this->em = $em;
         $this->saveBook = $saveBook;
         parent::__construct();
         $this->eventDispatcher = $eventDispatcher;
+        $this->logger = $logger;
     }
 
     protected function configure()
@@ -53,7 +59,7 @@ class UpdateBooksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $date = new DateTime('now');
-        $output->writeln(date_format($date, 'd/m/Y H:i:s').' : command launch');
+        $this->logger->info('Command launch '. date_format($date, 'd/m/Y H:i:s'));
 
         // 1/ Get all authors
         $authors = $this->em->getRepository(Author::class)->findAll();
@@ -66,6 +72,7 @@ class UpdateBooksCommand extends Command
         // 3/ Save books in database
         $savedBooks = $this->saveBook->save($books);
 
+        $this->logger->info($savedBooks.' books saved!');
         $output->writeln($savedBooks.' books saved!');
 
         // 4/ Send user subscribers
