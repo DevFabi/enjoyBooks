@@ -30,9 +30,6 @@ abstract class AbstractBookUploader implements BookUploaderInterface
 
     public function createUrl($authorName): string
     {
-        $param = '%s%s';
-        $author = sprintf($param, '?q=inauthor:', str_replace(' ', '+', $authorName));
-
         $data = [
             'printType' => 'books',
             'projection' => 'lite',
@@ -40,8 +37,6 @@ abstract class AbstractBookUploader implements BookUploaderInterface
             'key' => $this->key
         ];
 
-        $url = '%s%s%s%s';
-;
-        return sprintf($url, $this->url, $author,'&', http_build_query($data));
+        return sprintf('%s?q=inauthor:%s&%s', $this->url, str_replace(' ', '+', $authorName), http_build_query($data));
     }
 }

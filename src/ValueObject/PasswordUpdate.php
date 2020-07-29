@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\ValueObject;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PasswordUpdate

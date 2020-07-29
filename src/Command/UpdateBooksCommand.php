@@ -8,6 +8,7 @@ use App\Entity\Author;
 use App\Events\Events;
 use App\Service\Books\SaveBook;
 use App\Service\BookUploader\BookUploaderInterface;
+use App\Specifications\SaveBooks;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -38,7 +39,7 @@ class UpdateBooksCommand extends Command
      */
     private $logger;
 
-    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBook $saveBook,EventDispatcherInterface $eventDispatcher, LoggerInterface $logger)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBooks $saveBook,EventDispatcherInterface $eventDispatcher, LoggerInterface $logger)
     {
         $this->bookUploader = $bookUploader;
         $this->em = $em;
@@ -70,16 +71,15 @@ class UpdateBooksCommand extends Command
         $output->writeln(count($books).' books (not saved)');
 
         // 3/ Save books in database
-        $savedBooks = $this->saveBook->save($books);
-
-        $this->logger->info($savedBooks.' books saved!');
-        $output->writeln($savedBooks.' books saved!');
+//        $savedBooks = $this->saveBook->save($books);
+        foreach ($books as $bookToSave)
+        {
+            $this->saveBook->isSatisfiedBy($bookToSave);
+        }
 
         // 4/ Send user subscribers
-        if ($savedBooks > 0) {
             $event = new GenericEvent($date);
             $this->eventDispatcher->dispatch($event,Events::NEW_BOOK_NOTIFY);
-        }
 
         return 1;
     }

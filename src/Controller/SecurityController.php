@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\PasswordUpdate;
+use App\ValueObject\PasswordUpdate;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\PasswordUpdateType;
