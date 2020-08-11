@@ -55,7 +55,7 @@ class User implements UserInterface
     private $subscriptions;
 
     /**
-     * @Assert\EqualTo(propertyPath="password", message="Password is not the same")
+     * @Assert\EqualTo(propertyPath="password", message="Password is not the same", groups={"registration"})
      */
     public $passwordConfirm;
 

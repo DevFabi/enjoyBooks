@@ -31,4 +31,5 @@ services:
     App\Service\BookUploader\GoogleBookUploader:
         arguments: ['%env(API_GOOGLE_URL)%', '%env(API_GOOGLE_KEY)%','@http_client', '@doctrine.orm.entity_manager']
 
-
+    App\Tests\Behat\:
+        resource: '../tests/Behat/*'

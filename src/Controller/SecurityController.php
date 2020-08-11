@@ -57,7 +57,7 @@ class SecurityController extends AbstractController
     {
         $user = new User();
 
-        $form= $this->createForm(AccountType::class, $user, ['is_registration' => true]);
+        $form= $this->createForm(AccountType::class, $user, ['validation_groups' => 'registration']);
 
         $form->handleRequest($request);
 
@@ -81,7 +81,7 @@ class SecurityController extends AbstractController
     public function profile(Request $request): Response
     {
         $user = $this->getUser();
-        $form = $this->createForm(AccountType::class, $user, ['is_user_edit' => true]);
+        $form = $this->createForm(AccountType::class, $user,['validation_groups' => 'user_edit']);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){

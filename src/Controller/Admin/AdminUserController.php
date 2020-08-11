@@ -71,7 +71,7 @@ class AdminUserController extends AbstractController
      */
     public function edit(User $user, Request $request): Response
     {
-        $form = $this->createForm(AccountType::class, $user, ['is_admin' => 'true']);
+        $form = $this->createForm(AccountType::class, $user, ['validation_groups' => 'admin_edit']);
 
         $form->handleRequest($request);
 

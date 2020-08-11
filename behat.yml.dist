@@ -1,0 +1,29 @@
+default:
+    autoload: features
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\FeatureContext
+
+    extensions:
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                class: ~
+                path: ~
+                environment: dev
+                debug: ~
+        Behat\MinkExtension:
+                    base_url: http://192.168.99.100:8080/
+                    default_session: chrome
+                    javascript_session: chrome
+                    sessions:
+                        chrome:
+                            selenium2:
+                                browser: chrome
+                                wd_host: http://192.168.99.100:4444/wd/hub
+                                capabilities:
+                                    browserName: chrome
+                                    browser: chrome
+                                    version: ""
+                                    marionette: null
+                                    javascriptEnabled: true
