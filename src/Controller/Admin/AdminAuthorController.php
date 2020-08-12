@@ -41,7 +41,7 @@ class AdminAuthorController extends AbstractController
     }
 
     /**
-     * @Route("/admin/author/create", name="admin_create_author")
+     * @Route("/admin/author/create", name="admin_create_author", methods={"GET","POST"})
      */
     public function create(Request $request): Response
     {
@@ -64,7 +64,7 @@ class AdminAuthorController extends AbstractController
     }
 
     /**
-     * @Route("/admin/author/{id}/edit", name="admin_edit_author")
+     * @Route("/admin/author/{id}/edit", name="admin_edit_author", methods={"GET","PUT"})
      */
     public function edit(Author $author, Request $request): Response
     {

@@ -6,9 +6,9 @@ namespace App\Command;
 
 use App\Entity\Author;
 use App\Events\Events;
-use App\Service\Books\SaveBook;
 use App\Service\BookUploader\BookUploaderInterface;
-use App\Specifications\SaveBooks;
+use App\Specifications\CanSaveBooksSpecification;
+use App\UseCases\CreateBookUseCase;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -25,7 +25,7 @@ class UpdateBooksCommand extends Command
     protected static $defaultName = 'app:update-books';
 
     private $em;
-    private $saveBook;
+    private $canSaveBooksSpecification;
     /**
      * @var BookUploaderInterface
      */
@@ -38,15 +38,20 @@ class UpdateBooksCommand extends Command
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var CreateBookUseCase
+     */
+    private $createBookUseCase;
 
-    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, SaveBooks $saveBook,EventDispatcherInterface $eventDispatcher, LoggerInterface $logger)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, CanSaveBooksSpecification $canSaveBooksSpecification,EventDispatcherInterface $eventDispatcher, LoggerInterface $logger, CreateBookUseCase $createBookUseCase)
     {
         $this->bookUploader = $bookUploader;
         $this->em = $em;
-        $this->saveBook = $saveBook;
+        $this->canSaveBooksSpecification = $canSaveBooksSpecification;
         parent::__construct();
         $this->eventDispatcher = $eventDispatcher;
         $this->logger = $logger;
+        $this->createBookUseCase = $createBookUseCase;
     }
 
     protected function configure()
@@ -71,10 +76,11 @@ class UpdateBooksCommand extends Command
         $output->writeln(count($books).' books (not saved)');
 
         // 3/ Save books in database
-//        $savedBooks = $this->saveBook->save($books);
         foreach ($books as $bookToSave)
         {
-            $this->saveBook->isSatisfiedBy($bookToSave);
+            if ($this->canSaveBooksSpecification->isSatisfiedBy($bookToSave)) {
+                $this->createBookUseCase->create($bookToSave);
+            }
         }
 
         // 4/ Send user subscribers

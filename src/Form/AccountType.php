@@ -22,7 +22,7 @@ class AccountType extends AbstractType
             ->add('password', PasswordType::class)
             ->add('passwordConfirm', PasswordType::class)
         ;
-        if ($options['validation_groups'][0] == 'admin_edit')
+        if (in_array('admin_edit', $options['validation_groups'] ))
         {
             $builder
                 ->remove('email')
@@ -30,13 +30,13 @@ class AccountType extends AbstractType
                 ->remove('password')
                 ->remove('passwordConfirm');
         }
-        if ($options['validation_groups'][0] == 'user_edit')
+        if (in_array('user_edit', $options['validation_groups'] ))
         {
             $builder
                 ->remove('password')
                 ->remove('passwordConfirm');
         }
-        if ($options['validation_groups'][0] == 'registration')
+        if (in_array('registration', $options['validation_groups'] ))
         {
             $builder
                 ->remove('subscriptions');

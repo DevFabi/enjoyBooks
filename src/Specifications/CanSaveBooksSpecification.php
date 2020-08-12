@@ -6,10 +6,9 @@ namespace App\Specifications;
 
 use App\Entity\Author;
 use App\Entity\Book;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
-class SaveBooks implements SpecificationInterface
+class CanSaveBooksSpecification implements SpecificationInterface
 {
     private $em;
 
@@ -40,24 +39,7 @@ class SaveBooks implements SpecificationInterface
             return false;
         }
 
-        $this->createEntity($bookToSave, $book);
-
         return true;
     }
 
-    private function createEntity(array $bookToSave, Book $book)
-    {
-        $book
-            ->setVolumeId($bookToSave["id"])
-            ->setTitle($bookToSave["volumeInfo"]["title"])
-            ->setDescription($bookToSave["volumeInfo"]["description"])
-            ->setImage($bookToSave["volumeInfo"]["imageLinks"]["thumbnail"]);
-
-        if (key_exists("publishedDate",$bookToSave["volumeInfo"])){
-            $book->setPublishedDate(new DateTime($bookToSave["volumeInfo"]["publishedDate"]));
-        }
-
-        $this->em->persist($book);
-        $this->em->flush();
-    }
 }
