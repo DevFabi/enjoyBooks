@@ -7,7 +7,7 @@
         <h1 class="my-5"> Users handler</h1>
 
         <a href="{{ path('admin_create_user') }}">
-            <button class="btn btn-outline-info">Create</button>
+            <button class="btn btn-pink">Create</button>
         </a>
 
         <div class="table-responsive">
@@ -28,7 +28,7 @@
                         <td>{{ user.firstName }}</td>
                         <td>{{ user.lastName }}</td>
                         <td>
-                            <a href="{{ path('admin_edit_user', { id : user.id }) }}" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{{ path('admin_edit_user', { id : user.id }) }}" class="btn btn-orange"><i class="fas fa-edit"></i> Edit</a>
 {#                            <a href="{{ path('admin_delete_user', { id : user.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</a>#}
                         </td>
                     </tr>

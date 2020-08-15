@@ -10,11 +10,11 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3"></div>
-            <a href="{{ path('connect_google_start') }}" style="padding: 40px;">
-                <button type="button" class="btn btn-secondary btn-lg">Sign in with google</button>
+        <div class="col-md-4"></div>
+            <a href="{{ path('connect_google_start') }}">
+                <button type="button" class="btn btn-lg btn-google">Sign in with google</button>
             </a>
-        </div>
+        
     </div>
 
     <form class="form-signin" method="post">
@@ -29,12 +29,13 @@
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}"
         >
-        <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit" value="submit">
+        <button class="btn btn-lg btn-pink btn-block" type="submit" id="submit" value="submit">
             Sign in
         </button>
     </form>
 
     <a href="{{ path('register') }}">
-        <button class="btn btn-primary">Register</button>
+        <button class="btn btn-pink">Register</button>
     </a>
+</div>
 {% endblock %}

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+    <title>EnjoyBooks</title>
 {% block stylesheets %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -11,59 +12,63 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 {% endblock %}
 <body>
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Enjoy books</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+<div class="ebnavbartop">
+    <a class="col-md-3 col-lg-2 mr-0 px-3"<span id="logo"> Enjoybooks </span></a>
+    <button class="navbar-toggler position-absolute d-md-none" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
+
     {% if app.user %}
-            <a class="nav-link" id="signout" href="{{ path('logout') }}">Sign out</a>
-        {% else %}
-            <a class="nav-link" href="{{ path('login') }}">Connexion</a>
-            <a class="nav-link" href="{{ path('register') }}">Register</a>
-    {% endif %}
+        <li class="eb-nav-item text-nowrap">
+            <a class="eb-nav-link"  href="{{ path('logout') }}">Sign out</a>
         </li>
+        {% else %}
+        <li class="eb-nav-item text-nowrap"></li>
+            <a class="eb-nav-link" href="{{ path('login') }}">Connexion</a>
+        </li>
+        <li class="eb-nav-item text-nowrap"></li>
+            <a class="eb-nav-link" href="{{ path('register') }}">Register</a>
+        </li>
+    {% endif %}
+    
     </ul>
-</nav>
+</div>
 <div class="container-fluid">
     <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="sidebar-sticky pt-3">
+        <nav class="col-md-3 col-lg-2 ebnavbarleft">
+            <div class="sidebarMenu">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="eb-nav-link" href="{{ path('home') }}">
                             Home <span class="sr-only">(current)</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('author') }}">
+                    <li class="eb-nav-item">
+                        <a class="eb-nav-link" href="{{ path('author') }}">
                             Authors
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('books') }}">
+                    <li class="eb-nav-item">
+                        <a class="eb-nav-link" href="{{ path('books') }}">
                             Books
                         </a>
                     </li>
                 </ul>
                 {% if app.user %}
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                    <span style="color: green">User</span>
-                    <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                        <span data-feather="plus-circle"></span>
-                    </a>
+                <h6>
+                    <span id="eb-nav-title">User</span>
+        
                 </h6>
                 <ul class="nav flex-column mb-2">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('profile') }}">
+                    <li class="eb-nav-item">
+                        <a class="eb-nav-link" href="{{ path('profile') }}">
                             My profile
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('subscription' , {userId: app.user.getId()}) }}">
+                    <li class="eb-nav-item">
+                        <a class="eb-nav-link" href="{{ path('subscription' , {userId: app.user.getId()}) }}">
                             Subscriptions
                         </a>
                     </li>
@@ -71,26 +76,24 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_ADMIN') %}
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span style="color: red">Administration</span>
-                        <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                            <span data-feather="plus-circle"></span>
-                        </a>
+                    <h6>
+                        <span id="eb-nav-title">Administration</span>
+                    
                     </h6>
                     <ul class="nav flex-column mb-2">
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_book') }}">
+                        <li class="eb-nav-item">
+                            <a class="eb-nav-link" href="{{ path('admin_book') }}">
                                 Books
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_author') }}">
+                        <li class="eb-nav-item">
+                            <a class="eb-nav-link" href="{{ path('admin_author') }}">
                                 Authors
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin_user') }}">
+                        <li class="eb-nav-item">
+                            <a class="eb-nav-link" href="{{ path('admin_user') }}">
                                 Users
                             </a>
                         </li>
