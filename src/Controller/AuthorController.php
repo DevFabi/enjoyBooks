@@ -30,4 +30,5 @@ class AuthorController extends AbstractController
         return $this->render('author/index.html.twig',
                                     ["authors" => $authors]);
     }
+
 }

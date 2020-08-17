@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Authors{% endblock %}
+{% block title %}Auteurs{% endblock %}
 
 {% block body %}
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Authors</h1>
+        <h1 class="h2">Auteurs</h1>
     </div>
-    <h2>Author list</h2>
+    <h2>Liste des auteurs</h2>
     <div class="table-responsive">
         <table class="table table-striped table-sm">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Books</th>
+                <th>Nom</th>
+                <th>Livres</th>
             </tr>
             </thead>
             <tbody>
@@ -21,7 +21,7 @@
                 <td>{{ author.name }}</td>
                 <td>
                     <a  href="{{ path('bookByAuthor', {authorId: author.id}) }}">
-                        {{ author.books|length }} books
+                        {{ author.books|length }} livres
                     </a>
                   </td>
             </tr>

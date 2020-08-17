@@ -21,14 +21,14 @@
 
     {% if app.user %}
         <li class="eb-nav-item text-nowrap">
-            <a class="eb-nav-link"  href="{{ path('logout') }}">Sign out</a>
+            <a class="eb-nav-link"  href="{{ path('logout') }}">Se déconnecter</a>
         </li>
         {% else %}
         <li class="eb-nav-item text-nowrap"></li>
             <a class="eb-nav-link" href="{{ path('login') }}">Connexion</a>
         </li>
         <li class="eb-nav-item text-nowrap"></li>
-            <a class="eb-nav-link" href="{{ path('register') }}">Register</a>
+            <a class="eb-nav-link" href="{{ path('register') }}">S'inscrire</a>
         </li>
     {% endif %}
     
@@ -46,30 +46,35 @@
                     </li>
                     <li class="eb-nav-item">
                         <a class="eb-nav-link" href="{{ path('author') }}">
-                            Authors
+                            Auteurs
                         </a>
                     </li>
                     <li class="eb-nav-item">
                         <a class="eb-nav-link" href="{{ path('books') }}">
-                            Books
+                            Livres
+                        </a>
+                    </li>
+                    <li class="eb-nav-item">
+                        <a class="eb-nav-link" href="{{ path('searchBooks') }}">
+                            Recherche de livres
                         </a>
                     </li>
                 </ul>
                 {% if app.user %}
                 <h6>
-                    <span id="eb-nav-title">User</span>
+                    <span id="eb-nav-title">Mon espace</span>
         
                 </h6>
                 <ul class="nav flex-column mb-2">
 
                     <li class="eb-nav-item">
                         <a class="eb-nav-link" href="{{ path('profile') }}">
-                            My profile
+                            Mon profil
                         </a>
                     </li>
                     <li class="eb-nav-item">
                         <a class="eb-nav-link" href="{{ path('subscription' , {userId: app.user.getId()}) }}">
-                            Subscriptions
+                            Mes abonnements
                         </a>
                     </li>
                 </ul>
@@ -84,17 +89,17 @@
 
                         <li class="eb-nav-item">
                             <a class="eb-nav-link" href="{{ path('admin_book') }}">
-                                Books
+                                Livres
                             </a>
                         </li>
                         <li class="eb-nav-item">
                             <a class="eb-nav-link" href="{{ path('admin_author') }}">
-                                Authors
+                                Auteurs
                             </a>
                         </li>
                         <li class="eb-nav-item">
                             <a class="eb-nav-link" href="{{ path('admin_user') }}">
-                                Users
+                                Utilisateurs
                             </a>
                         </li>
                     </ul>

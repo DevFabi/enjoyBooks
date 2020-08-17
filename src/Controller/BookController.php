@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Service\Books\GetListOfBooks;
+use App\Entity\Author;
+use App\Form\AuthorType;
+use App\Service\BookUploader\GoogleBookUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,4 +65,26 @@ class BookController extends AbstractController
             'books' => $books
         ]);
     }
+
+    /**
+     * @Route("/searchBooks", name="searchBooks")
+     */
+    public function searchBooks(Request $request, GoogleBookUploader $bookUploader): Response
+    {
+        $author = new Author();
+        $books = [];
+        $form = $this->createForm(AuthorType::class, $author);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+           $books = $bookUploader->getAllBooks([$author]);
+        }   
+
+        return $this->render('book/search.html.twig', [
+            'form' => $form->createView(),
+            'books' => $books
+        ]);
+    }
+
 }
