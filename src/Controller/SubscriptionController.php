@@ -58,13 +58,20 @@ class SubscriptionController extends AbstractController
      */
     public function post(Request $request): Response
     {
-        $form = $this->createForm(SubscriptionFormType::class);
+        $author = new Author();
+        $form = $this->createForm(SubscriptionFormType::class, $author);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
             $user = $this->getUser();
-            $this->addSubscriptionService->addSubscription($user, $data);
+
+            $ifAuthorExist = $this->em->getRepository(Author::class)->findOneBy(['name' => $author->getName()]);
+            if ($ifAuthorExist == null) {
+                $this->em->persist($author);
+                $this->em->flush();
+            }
+
+            $this->addSubscriptionService->addSubscription($user, $author->getName());
 
             return $this->redirectToRoute('subscription', ['userId' => $user->getId()]);
         }

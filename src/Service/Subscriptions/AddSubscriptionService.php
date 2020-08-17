@@ -30,9 +30,7 @@ class AddSubscriptionService
 
     public function addSubscription(User $user, $data)
     {
-        $authorId = $data['author'];
-
-        $author = $this->em->getRepository(Author::class)->findOneBy(['id' => $authorId]);
+        $author = $this->em->getRepository(Author::class)->findOneBy(['name' => $data]);
 
         $this->logger->info('User'. $user->getEmail(). ' just add author '. $author->getName());
 
