@@ -39,4 +39,15 @@ abstract class AbstractBookUploader implements BookUploaderInterface
 
         return sprintf('%s?q=inauthor:%s&%s', $this->url, str_replace(' ', '+', $authorName), http_build_query($data));
     }
+
+    public function createSearchVolumeUrl($volumeId): string
+    {
+        $data = [
+            'projection' => 'lite',
+            'langRestrict' => 'fr',
+            'key' => $this->key
+        ];
+
+        return sprintf('%s?q=%s&%s', $this->url, $volumeId, http_build_query($data));
+    }
 }

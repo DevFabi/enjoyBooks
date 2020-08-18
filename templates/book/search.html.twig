@@ -22,14 +22,14 @@
         <div class="card mb-3" style="max-width: 540px;">
             <div class="row no-gutters">
                 <div class="col-md-4">
-                    <img src="{{book.volumeInfo.imageLinks.smallThumbnail}}" class="card-img" alt="...">
+                    <img src="{{book.image}}" class="card-img" alt="...">
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-title">{{ book.volumeInfo.title }}</h5>
-                        <!-- <p class="card-text">|u.truncate(300, '...')</p> -->
-                        <p class="card-text"><small class="text-muted">{{book.volumeInfo.publishedDate|date("d/m/Y")}}</small></p>
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text">{{ book.description|u.truncate(300, '...')}}</p>
                     </div>
+                    <a href="{{ path('addReadBook' , {volumeId: book.volumeId }) }}"> + Read books </a>
                 </div>
             </div>
         </div>

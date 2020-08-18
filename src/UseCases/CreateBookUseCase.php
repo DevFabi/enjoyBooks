@@ -26,15 +26,22 @@ class CreateBookUseCase
         $book
             ->setVolumeId($bookToSave["id"])
             ->setTitle($bookToSave["volumeInfo"]["title"])
-            ->setDescription($bookToSave["volumeInfo"]["description"])
             ->setImage($bookToSave["volumeInfo"]["imageLinks"]["thumbnail"]);
+
+            if(key_exists("description",$bookToSave["volumeInfo"])){
+                $book->setDescription($bookToSave["volumeInfo"]["description"]);
+            }
 
         foreach ($bookToSave["volumeInfo"]["authors"] as $author) {
             $foundAuthor = $this->em->getRepository(Author::class)->findOneBy(["name" => $author]);
-            if ($foundAuthor !== null) {
+            if ($foundAuthor === null) {
+                $foundAuthor = new Author();
+                $foundAuthor->setName($author);
+                $this->em->persist($foundAuthor);
+                $this->em->flush();
+            }
                 $book->setAuthors($foundAuthor);
                 continue;
-            }
         }
 
         if (key_exists("publishedDate",$bookToSave["volumeInfo"])){

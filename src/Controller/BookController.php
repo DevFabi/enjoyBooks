@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Service\Books\GetListOfBooks;
 use App\Entity\Author;
+use App\Entity\Book;
 use App\Form\AuthorType;
 use App\Service\BookUploader\GoogleBookUploader;
+use App\Specifications\CanSaveBooksSpecification;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,15 +20,15 @@ class BookController extends AbstractController
     /**
      * @var EntityManagerInterface
      */
-    private $entityManager;
+    private $em;
     /**
      * @var GetListOfBooks
      */
     private $listOfBooks;
 
-    public function __construct(EntityManagerInterface $entityManager, GetListOfBooks $listOfBooks)
+    public function __construct(EntityManagerInterface $em, GetListOfBooks $listOfBooks)
     {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
         $this->listOfBooks = $listOfBooks;
     }
 
@@ -69,16 +71,33 @@ class BookController extends AbstractController
     /**
      * @Route("/searchBooks", name="searchBooks")
      */
-    public function searchBooks(Request $request, GoogleBookUploader $bookUploader): Response
+    public function searchBooks(Request $request, GoogleBookUploader $bookUploader, CanSaveBooksSpecification $canSaveBooksSpecification): Response
     {
         $author = new Author();
         $books = [];
         $form = $this->createForm(AuthorType::class, $author);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-           $books = $bookUploader->getAllBooks([$author]);
+            // Search book in API
+           $booksFound = $bookUploader->getAllBooks([$author]);
+           foreach ($booksFound as $bookToSave)
+           {
+               if ($canSaveBooksSpecification->isSatisfiedBy($bookToSave)) {
+                   $book = new Book();
+                   $book->setVolumeId($bookToSave["id"])
+                       ->setTitle($bookToSave["volumeInfo"]["title"])
+                       ->setImage($bookToSave["volumeInfo"]["imageLinks"]["thumbnail"])
+                       ->setDescription($bookToSave["volumeInfo"]["description"]);
+                   $books[] = $book;
+                   }
+           }
+            // Search book in DB
+            $author = $this->em->getRepository(Author::class)->findOneBy(['name' =>$author->getName()]);
+            $db_books = $this->em->getRepository(Book::class)->findBy(['authors' => $author]);
+            foreach ( $db_books as $book) {
+                $books[] = $book;
+            }
         }   
 
         return $this->render('book/search.html.twig', [

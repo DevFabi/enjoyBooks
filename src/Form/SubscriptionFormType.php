@@ -22,6 +22,7 @@ class SubscriptionFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Author::class,
+            'validation_groups' => ["create"]
         ]);
     }
 }

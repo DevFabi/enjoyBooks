@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @UniqueEntity(
+ *     groups={"create"},
  *     fields={"name"},
  *     message="This author already exist"
  * )
@@ -31,7 +32,16 @@ class Author
      *      max = 155,
      *      minMessage = "Name must be at least {{ limit }} characters long",
      *      maxMessage = "Name cannot be longer than {{ limit }} characters",
-     *      allowEmptyString = false
+     *      allowEmptyString = false,
+     *      groups={"create"}
+     * )
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 155,
+     *      minMessage = "Name must be at least {{ limit }} characters long",
+     *      maxMessage = "Name cannot be longer than {{ limit }} characters",
+     *      allowEmptyString = false,
+     *      groups={"search"}
      * )
      */
     private $name;

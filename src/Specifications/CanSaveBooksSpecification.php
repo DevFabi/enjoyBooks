@@ -29,10 +29,6 @@ class CanSaveBooksSpecification implements SpecificationInterface
             }
         }
 
-        if ($book->getAuthors() === null)
-        {
-            return false;
-        }
         if (!key_exists("title",$bookToSave["volumeInfo"])
             || !key_exists("description",$bookToSave["volumeInfo"])
             || !key_exists("imageLinks",$bookToSave["volumeInfo"])){

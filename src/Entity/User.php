@@ -71,9 +71,15 @@ class User implements UserInterface
      */
     private $lastName;
 
+    /**
+     * @ORM\OneToMany(targetEntity=ReadBooks::class, mappedBy="User")
+     */
+    private $readBooks;
+
     public function __construct()
     {
         $this->subscriptions = new ArrayCollection();
+        $this->readBooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,6 +223,37 @@ class User implements UserInterface
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReadBooks[]
+     */
+    public function getReadBooks(): Collection
+    {
+        return $this->readBooks;
+    }
+
+    public function addReadBook(ReadBooks $readBook): self
+    {
+        if (!$this->readBooks->contains($readBook)) {
+            $this->readBooks[] = $readBook;
+            $readBook->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReadBook(ReadBooks $readBook): self
+    {
+        if ($this->readBooks->contains($readBook)) {
+            $this->readBooks->removeElement($readBook);
+            // set the owning side to null (unless already changed)
+            if ($readBook->getUser() === $this) {
+                $readBook->setUser(null);
+            }
+        }
 
         return $this;
     }
