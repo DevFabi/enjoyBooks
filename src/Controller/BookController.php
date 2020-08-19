@@ -10,6 +10,7 @@ use App\Service\BookUploader\GoogleBookUploader;
 use App\Specifications\CanSaveBooksSpecification;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,6 +71,7 @@ class BookController extends AbstractController
 
     /**
      * @Route("/searchBooks", name="searchBooks")
+     * @IsGranted("ROLE_USER")
      */
     public function searchBooks(Request $request, GoogleBookUploader $bookUploader, CanSaveBooksSpecification $canSaveBooksSpecification): Response
     {

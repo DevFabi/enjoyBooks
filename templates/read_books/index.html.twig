@@ -8,6 +8,13 @@
     </div>
     <div class="container">
         <div class="row">
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
             {% for book in books %}
                 <div class="col-md-6">
                     <div class="card mb-3" style="max-width: 540px;">
@@ -21,6 +28,7 @@
                                     <p class="card-text">{{book.book.description|u.truncate(300, '...')}}</p>
                                     <p class="card-text"><small class="text-muted">{{book.book.publishedDate|date("d/m/Y")}}</small></p>
                                     <span class="badge badge-pill badge-light">{{book.book.authors.name}}</span>
+                                    <a href="{{ path('removeReadBook', { volumeId : book.book.volumeId }) }}" class="btn btn-pink"><i class="fas fa-edit"></i>Supprimer</a>
                                 </div>
                             </div>
                         </div>
