@@ -9,12 +9,16 @@ use App\Form\AuthorType;
 use App\Service\BookUploader\GoogleBookUploader;
 use App\Specifications\CanSaveBooksSpecification;
 use Doctrine\ORM\EntityManagerInterface;
+use Elastica\Client;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Elastica\Query;
+use Elastica\Query\BoolQuery;
+use Elastica\Query\Match;
 
 class BookController extends AbstractController
 {
@@ -73,7 +77,7 @@ class BookController extends AbstractController
      * @Route("/searchBooks", name="searchBooks")
      * @IsGranted("ROLE_USER")
      */
-    public function searchBooks(Request $request, GoogleBookUploader $bookUploader, CanSaveBooksSpecification $canSaveBooksSpecification): Response
+    public function searchBooks(Request $request, GoogleBookUploader $bookUploader, CanSaveBooksSpecification $canSaveBooksSpecification, Client $client): Response
     {
         $author = new Author();
         $books = [];
@@ -82,23 +86,37 @@ class BookController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
             // Search book in API
-           $booksFound = $bookUploader->getAllBooks([$author]);
-           foreach ($booksFound as $bookToSave)
-           {
-               if ($canSaveBooksSpecification->isSatisfiedBy($bookToSave)) {
-                   $book = new Book();
-                   $book->setVolumeId($bookToSave["id"])
-                       ->setTitle($bookToSave["volumeInfo"]["title"])
-                       ->setImage($bookToSave["volumeInfo"]["imageLinks"]["thumbnail"])
-                       ->setDescription($bookToSave["volumeInfo"]["description"]);
-                   $books[] = $book;
-                   }
-           }
+        //    $booksFound = $bookUploader->getAllBooks([$author]);
+        //    foreach ($booksFound as $bookToSave)
+        //    {
+        //        if ($canSaveBooksSpecification->isSatisfiedBy($bookToSave)) {
+        //            $book = new Book();
+        //            $book->setVolumeId($bookToSave["id"])
+        //                ->setTitle($bookToSave["volumeInfo"]["title"])
+        //                ->setImage($bookToSave["volumeInfo"]["imageLinks"]["thumbnail"])
+        //                ->setDescription($bookToSave["volumeInfo"]["description"]);
+        //            $books[] = $book;
+        //            }
+        //    }
             // Search book in DB
-            $author = $this->em->getRepository(Author::class)->findOneBy(['name' =>$author->getName()]);
-            $db_books = $this->em->getRepository(Book::class)->findBy(['authors' => $author]);
-            foreach ( $db_books as $book) {
-                $books[] = $book;
+            // $author = $this->em->getRepository(Author::class)->findOneBy(['name' =>$author->getName()]);
+            // $db_books = $this->em->getRepository(Book::class)->findBy(['authors' => $author]);
+            // foreach ( $db_books as $book) {
+            //     $books[] = $book;
+            // }
+            $match = new Match();
+            $match->setField('author', $author->getName());
+
+            $bool = new BoolQuery();
+            $bool->addShould($match);
+
+            $elasticaQuery = new Query($bool);
+
+            $foundBooks = $client->getIndex('book')->search($elasticaQuery);
+            $books = [];
+
+            foreach ($foundBooks as $book) {
+                $books[] = $book->getSource();
             }
         }   
 

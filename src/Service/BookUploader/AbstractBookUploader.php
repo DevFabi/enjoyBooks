@@ -50,4 +50,16 @@ abstract class AbstractBookUploader implements BookUploaderInterface
 
         return sprintf('%s?q=%s&%s', $this->url, $volumeId, http_build_query($data));
     }
+
+    public function createGeneralUrl(): string
+    {
+        $data = [
+            'printType' => 'books',
+            'projection' => 'lite',
+            'langRestrict' => 'fr',
+            'key' => $this->key
+        ];
+
+        return sprintf('%s&%s', $this->url, http_build_query($data));
+    }
 }

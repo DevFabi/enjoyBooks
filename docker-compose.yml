@@ -49,5 +49,4 @@ services:
       environment:
         - HUB_HOST=hub
         - HUB_PORT=4444
-      # ports:
-      #     - 5900:5900
+      

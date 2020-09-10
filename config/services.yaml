@@ -33,3 +33,8 @@ services:
 
     App\Tests\Behat\:
         resource: '../tests/Behat/*'
+
+    Elastica\Client:
+        $config:
+            host: '192.168.99.100'
+            port: '9200'
