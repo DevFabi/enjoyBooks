@@ -31,7 +31,8 @@ class CanSaveBooksSpecification implements SpecificationInterface
 
         if (!key_exists("title",$bookToSave["volumeInfo"])
             || !key_exists("description",$bookToSave["volumeInfo"])
-            || !key_exists("imageLinks",$bookToSave["volumeInfo"])){
+            || !key_exists("imageLinks",$bookToSave["volumeInfo"])
+            || !key_exists("authors",$bookToSave["volumeInfo"])){
             return false;
         }
 

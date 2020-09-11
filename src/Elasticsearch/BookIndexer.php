@@ -48,12 +48,14 @@ class BookIndexer
         $allBooks = $this->bookRepository->findAll();
 
         // API
-//        $allApiBooks = $this->allApiBooks->getAllApiBooks();
+        $allApiBooks = $this->allApiBooks->getAllApiBooks();
+
+        $books = array_merge($allApiBooks, $allBooks);
 
         $index = $this->client->getIndex($indexName);
 
         $documents = [];
-        foreach ($allBooks as $book) {
+        foreach ($books as $book) {
             $documents[] = $this->buildDocument($book);
         }
 

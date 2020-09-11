@@ -32,7 +32,7 @@ class AdminAuthorController extends AbstractController
         $authors = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            15
+            50
         );
 
         return $this->render('admin/author/index.html.twig', [

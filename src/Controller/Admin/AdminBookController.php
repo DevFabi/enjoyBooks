@@ -31,7 +31,7 @@ class AdminBookController extends AbstractController
         $books = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            15
+            50
         );
 
         return $this->render('admin/book/index.html.twig', [

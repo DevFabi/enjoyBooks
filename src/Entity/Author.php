@@ -36,7 +36,7 @@ class Author
      *      groups={"create"}
      * )
      * @Assert\Length(
-     *      min = 6,
+     *      min = 4,
      *      max = 155,
      *      minMessage = "Name must be at least {{ limit }} characters long",
      *      maxMessage = "Name cannot be longer than {{ limit }} characters",

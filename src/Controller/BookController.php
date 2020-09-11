@@ -85,25 +85,7 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            // Search book in API
-        //    $booksFound = $bookUploader->getAllBooks([$author]);
-        //    foreach ($booksFound as $bookToSave)
-        //    {
-        //        if ($canSaveBooksSpecification->isSatisfiedBy($bookToSave)) {
-        //            $book = new Book();
-        //            $book->setVolumeId($bookToSave["id"])
-        //                ->setTitle($bookToSave["volumeInfo"]["title"])
-        //                ->setImage($bookToSave["volumeInfo"]["imageLinks"]["thumbnail"])
-        //                ->setDescription($bookToSave["volumeInfo"]["description"]);
-        //            $books[] = $book;
-        //            }
-        //    }
-            // Search book in DB
-            // $author = $this->em->getRepository(Author::class)->findOneBy(['name' =>$author->getName()]);
-            // $db_books = $this->em->getRepository(Book::class)->findBy(['authors' => $author]);
-            // foreach ( $db_books as $book) {
-            //     $books[] = $book;
-            // }
+          
             $match = new Match();
             $match->setField('author', $author->getName());
 
