@@ -13,6 +13,7 @@ use Elastica\Client;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -77,7 +78,7 @@ class BookController extends AbstractController
      * @Route("/searchBooks", name="searchBooks")
      * @IsGranted("ROLE_USER")
      */
-    public function searchBooks(Request $request, GoogleBookUploader $bookUploader, CanSaveBooksSpecification $canSaveBooksSpecification, Client $client): Response
+    public function searchBooks(Request $request, Client $client): Response
     {
         $author = new Author();
         $books = [];
@@ -87,7 +88,10 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
           
             $match = new Match();
-            $match->setField('author', $author->getName());
+            $match->setFieldQuery('author', $author->getName());
+
+            $match->setFieldFuzziness('author', 'AUTO')
+                  ->setFieldMinimumShouldMatch('author', '80%');
 
             $bool = new BoolQuery();
             $bool->addShould($match);
@@ -103,6 +107,43 @@ class BookController extends AbstractController
         }   
 
         return $this->render('book/search.html.twig', [
+            'form' => $form->createView(),
+            'books' => $books
+        ]);
+    }
+
+    /**
+     * @Route("/searchBooksBis", name="searchBooksBis")
+     * @IsGranted("ROLE_USER")
+     */
+    public function searchBooksBis(Request $request,Client $client): Response
+    {
+        $books = [];
+        $form = $this->createFormBuilder()->add('text', TextType::class)->getForm();
+        $form->handleRequest($request);
+
+        $result = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()){
+
+            $match = new Query\MultiMatch();
+            $match->setFields(['title','author'])->setQuery($result['text']);
+
+            $match->setFuzziness('AUTO');
+
+            $bool = new BoolQuery();
+            $bool->addShould($match);
+
+            $elasticaQuery = new Query($bool);
+
+            $foundBooks = $client->getIndex('book')->search($elasticaQuery);
+            $books = [];
+
+            foreach ($foundBooks as $book) {
+                $books[] = $book->getSource();
+            }
+        }
+
+        return $this->render('book/searchBis.html.twig', [
             'form' => $form->createView(),
             'books' => $books
         ]);

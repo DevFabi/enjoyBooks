@@ -54,7 +54,7 @@ class GetAllApiBooks
         return $response['items'];
     }
 
-    private function normalize($item): Book
+    private function normalize($item)
     {
         $book = new Book();
 
