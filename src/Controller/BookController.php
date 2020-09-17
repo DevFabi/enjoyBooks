@@ -90,15 +90,15 @@ class BookController extends AbstractController
             $match = new Match();
             $match->setFieldQuery('author', $author->getName());
 
-            $match->setFieldFuzziness('author', 'AUTO')
-                  ->setFieldMinimumShouldMatch('author', '80%');
+            $match->setFieldFuzziness('author', '2')
+                  ->setFieldMinimumShouldMatch('author', '100%');
 
             $bool = new BoolQuery();
-            $bool->addShould($match);
+            $bool->addMust($match);
 
             $elasticaQuery = new Query($bool);
-
             $foundBooks = $client->getIndex('book')->search($elasticaQuery);
+         
             $books = [];
 
             foreach ($foundBooks as $book) {
@@ -128,7 +128,8 @@ class BookController extends AbstractController
             $match = new Query\MultiMatch();
             $match->setFields(['title','author'])->setQuery($result['text']);
 
-            $match->setFuzziness('AUTO');
+            $match->setFuzziness('2');
+            $match->setMinimumShouldMatch('100%');
 
             $bool = new BoolQuery();
             $bool->addShould($match);

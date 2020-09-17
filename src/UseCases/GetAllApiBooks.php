@@ -13,9 +13,10 @@ class GetAllApiBooks
 {
 
     const KEYWORD = [
-        'roman',
-        'océan',
-        'animaux'
+        'Katherine Pancol',
+        'Michel Bussi',
+        'Valérie Perrin',
+        'Joël Dicker'
     ];
 
     private $uploader;

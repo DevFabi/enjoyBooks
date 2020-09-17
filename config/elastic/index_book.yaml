@@ -3,11 +3,18 @@ settings:
         # single node, no sharding
         number_of_shards: 1
         number_of_replicas: 0
+        analysis:
+            analyzer:
+                my_analyzer:
+                    tokenizer: "keyword"
+                    filter: ["word_delimiter_graph"]
 mappings:
     dynamic: false # disable dynamic mapping
     properties:
         title: 
             type: text
+            analyzer: my_analyzer
         author:
             type: text
+            analyzer: my_analyzer
             
