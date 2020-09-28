@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service\Subscriptions;
-
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,13 +14,14 @@ class GetUserSubscriptionService
      */
     private $em;
 
-    public function __construct(EntityManagerInterface $em )
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
     /**
      * @param $userId
+     *
      * @return mixed
      */
     public function getUserSubscriptions($userId)

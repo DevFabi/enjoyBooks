@@ -1,10 +1,7 @@
 <?php
 
-
 namespace App\Tests\Behat;
 
-
-use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\MinkExtension\Context\MinkAwareContext;
@@ -12,17 +9,16 @@ use Behat\MinkExtension\Context\MinkContext;
 
 class FeatureContext extends MinkContext implements MinkAwareContext
 {
-
     /**
      * @BeforeScenario @loginAsUser
      */
     public function loginAsUser()
     {
         $this->visitPath('/login');
-        $this->fillField("Email","tutuToto@gmail.com");
-        $this->fillField("Password" ,"Tutu");
-        $button = $this->fixStepArgument("submit");
-        $this->getSession()->getPage()->pressButton("submit");
+        $this->fillField('Email', 'tutuToto@gmail.com');
+        $this->fillField('Password', 'Tutu');
+        $button = $this->fixStepArgument('submit');
+        $this->getSession()->getPage()->pressButton('submit');
     }
 
     /**
@@ -31,11 +27,12 @@ class FeatureContext extends MinkContext implements MinkAwareContext
     public function loginAsAdmin()
     {
         $this->visitPath('/login');
-        $this->fillField("Email","admin@gmail.com");
-        $this->fillField("Password" ,"tutu");
-        $button = $this->fixStepArgument("submit");
-        $this->getSession()->getPage()->pressButton("submit");
+        $this->fillField('Email', 'admin@gmail.com');
+        $this->fillField('Password', 'tutu');
+        $button = $this->fixStepArgument('submit');
+        $this->getSession()->getPage()->pressButton('submit');
     }
+
     /**
      * @Given /^I wait (\d+) seconds$/
      */
@@ -53,7 +50,7 @@ class FeatureContext extends MinkContext implements MinkAwareContext
     }
 
     /**
-     * afterTheStep
+     * afterTheStep.
      *
      * If the current step is failing, then print the html code of
      * the current page and, if the driver is an instance of
@@ -98,10 +95,10 @@ class FeatureContext extends MinkContext implements MinkAwareContext
         }
 
         $this->saveScreenshot($fileName . $extension, $filePath);
-        echo(sprintf(
+        echo sprintf(
             "Result screenshot at: %s \n",
             $fullPath
-        ));
+        );
 
         return $this;
     }
@@ -112,7 +109,6 @@ class FeatureContext extends MinkContext implements MinkAwareContext
         $extension = '.txt';
         $fullPath = $filePath . $fileName . $extension;
 
-
         if (!file_exists($filePath)) {
             mkdir($filePath, 0777, true);
         }
@@ -121,10 +117,10 @@ class FeatureContext extends MinkContext implements MinkAwareContext
         }
 
         file_put_contents($fullPath, $this->getSession()->getPage()->GetContent());
-        echo(sprintf(
+        echo sprintf(
             "Result HTML page content at: %s \n",
             $fullPath
-        ));
+        );
 
         return $this;
     }
@@ -157,12 +153,11 @@ class FeatureContext extends MinkContext implements MinkAwareContext
         }
 
         file_put_contents($fullPath, $fileContent);
-        echo(sprintf(
+        echo sprintf(
             "Position of error at: %s \n",
             $fullPath
-        ));
+        );
 
         return $this;
     }
-
 }

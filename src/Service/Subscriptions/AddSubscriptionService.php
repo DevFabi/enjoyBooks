@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service\Subscriptions;
-
 
 use App\Entity\Author;
 use App\Entity\User;
@@ -27,14 +26,13 @@ class AddSubscriptionService
         $this->logger = $logger;
     }
 
-
     public function addSubscription(User $user, $data)
     {
         $author = $this->em->getRepository(Author::class)->findOneBy(['name' => $data]);
 
-        $this->logger->info('User'. $user->getEmail(). ' just add author '. $author->getName());
+        $this->logger->info('User' . $user->getEmail() . ' just add author ' . $author->getName());
 
-        /** @var Author $author */
+        /* @var Author $author */
         $user->addSubscription($author);
 
         $this->em->persist($user);

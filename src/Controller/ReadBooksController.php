@@ -10,7 +10,6 @@ use App\UseCases\CreateBookUseCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -46,7 +45,7 @@ class ReadBooksController extends AbstractController
         $readBooks = $this->em->getRepository(ReadBooks::class)->findBy(['User' => $this->getUser()]);
 
         return $this->render('read_books/index.html.twig', [
-            'books' => $readBooks
+            'books' => $readBooks,
         ]);
     }
 
@@ -57,8 +56,7 @@ class ReadBooksController extends AbstractController
     public function addReadBook($volumeId, CreateBookUseCase $createBookUseCase, AddUserReadBookUseCase $addUserReadBookUseCase): Response
     {
         $book = $this->em->getRepository(Book::class)->findOneBy(['volumeId' => $volumeId]);
-        if($book == null)
-        {
+        if (null == $book) {
             $url = $this->uploader->createSearchVolumeUrl($volumeId);
             $response = $this->client->request(
                 'GET',
@@ -70,15 +68,15 @@ class ReadBooksController extends AbstractController
             $book = $this->em->getRepository(Book::class)->findOneBy(['volumeId' => $volumeId]);
         }
 
-        $addUserReadBookUseCase->create($this->getUser(),$book);
+        $addUserReadBookUseCase->create($this->getUser(), $book);
 
-        $this->addFlash('success', 'Le livre '.$book->getTitle().' a bien été ajouté à votre liste.');
+        $this->addFlash('success', 'Le livre ' . $book->getTitle() . ' a bien été ajouté à votre liste.');
 
         $readBooks = $this->em->getRepository(ReadBooks::class)->findBy(['User' => $this->getUser()]);
 
-       return $this->render('read_books/index.html.twig', [
-           'books' => $readBooks
-       ]);
+        return $this->render('read_books/index.html.twig', [
+            'books' => $readBooks,
+        ]);
     }
 
     /**
@@ -93,13 +91,13 @@ class ReadBooksController extends AbstractController
 
         $this->em->remove($readBook);
         $this->em->flush();
-        
+
         $this->addFlash('success', 'Le livre " '.$book->getTitle().' " a bien été supprimé de votre liste.');
 
         $readBooks = $this->em->getRepository(ReadBooks::class)->findBy(['User' => $this->getUser()]);
 
         return $this->render('read_books/index.html.twig', [
-            'books' => $readBooks
+            'books' => $readBooks,
         ]);
     }
 }

@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service\Notification;
-
 
 use App\Entity\Book;
 use App\Message\SendNotification;
@@ -43,22 +42,19 @@ class NotifiedUser implements NotificationInterface
 
         /** @var Book $book */
         foreach ($books as $book) {
-
             $author = $book->getAuthors();
             $users = $author->getUsers();
 
-            $message = "Author :".$author->getName()." publish a new book :".$book->getTitle();
-            dump('Book title : '.$book->getTitle());
-            foreach ($users as $user){
-
+            $message = 'Author :' . $author->getName() . ' publish a new book :' . $book->getTitle();
+            dump('Book title : ' . $book->getTitle());
+            foreach ($users as $user) {
                 $this->dispatchNotification($message, $user->getEmail());
-                $emailSend++;
+                ++$emailSend;
             }
         }
 
         return $emailSend;
     }
-
 
     public function dispatchNotification($message, $email)
     {

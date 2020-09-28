@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\ValueObject\PasswordUpdate;
 use App\Entity\User;
 use App\Form\AccountType;
 use App\Form\PasswordUpdateType;
+use App\ValueObject\PasswordUpdate;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -18,7 +18,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -38,13 +37,14 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
         ]);
     }
 
     /**
      * @Route("/logout", name="logout")
      * @IsGranted("ROLE_USER")
+     *
      * @throws Exception
      */
     public function logout(): Exception
@@ -59,11 +59,11 @@ class SecurityController extends AbstractController
     {
         $user = new User();
 
-        $form= $this->createForm(AccountType::class, $user, ['validation_groups' => 'registration']);
+        $form = $this->createForm(AccountType::class, $user, ['validation_groups' => 'registration']);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $this->em->persist($user);
@@ -73,7 +73,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/registration.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -83,16 +83,16 @@ class SecurityController extends AbstractController
     public function profile(Request $request): Response
     {
         $user = $this->getUser();
-        $form = $this->createForm(AccountType::class, $user,['validation_groups' => 'user_edit']);
+        $form = $this->createForm(AccountType::class, $user, ['validation_groups' => 'user_edit']);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($user);
             $this->em->flush();
         }
 
-        return $this->render('user/profile.html.twig',[
-            'form' => $form->createView()]);
+        return $this->render('user/profile.html.twig', [
+            'form' => $form->createView(),]);
     }
 
     /**
@@ -100,17 +100,16 @@ class SecurityController extends AbstractController
      */
     public function updatePassword(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
-        $passwordUpdate= new PasswordUpdate();
+        $passwordUpdate = new PasswordUpdate();
 
         $form = $this->createForm(PasswordUpdateType::class, $passwordUpdate);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $user = $this->getUser();
-            if (!password_verify($passwordUpdate->getOldPassword(), $user->getPassword()))
-            {
+            if (!password_verify($passwordUpdate->getOldPassword(), $user->getPassword())) {
                 throw new Exception('Wrong old password');
-            }else{
+            } else {
                 $newPassword = $passwordUpdate->getNewPassword();
                 $hash = $encoder->encodePassword($user, $newPassword);
 
@@ -120,11 +119,10 @@ class SecurityController extends AbstractController
 
                 return $this->redirectToRoute('profile');
             }
-
         }
 
         return $this->render('user/password.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

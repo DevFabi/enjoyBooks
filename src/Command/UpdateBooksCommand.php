@@ -1,8 +1,8 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace App\Command;
-
 
 use App\Entity\Author;
 use App\Events\Events;
@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
-
 
 class UpdateBooksCommand extends Command
 {
@@ -43,7 +42,7 @@ class UpdateBooksCommand extends Command
      */
     private $createBookUseCase;
 
-    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, CanSaveBooksSpecification $canSaveBooksSpecification,EventDispatcherInterface $eventDispatcher, LoggerInterface $logger, CreateBookUseCase $createBookUseCase)
+    public function __construct(BookUploaderInterface $bookUploader, EntityManagerInterface $em, CanSaveBooksSpecification $canSaveBooksSpecification, EventDispatcherInterface $eventDispatcher, LoggerInterface $logger, CreateBookUseCase $createBookUseCase)
     {
         $this->bookUploader = $bookUploader;
         $this->em = $em;
@@ -65,7 +64,7 @@ class UpdateBooksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $date = new DateTime('now');
-        $this->logger->info('Command launch '. date_format($date, 'd/m/Y H:i:s'));
+        $this->logger->info('Command launch ' . date_format($date, 'd/m/Y H:i:s'));
 
         // 1/ Get all authors
         $authors = $this->em->getRepository(Author::class)->findAll();
@@ -73,19 +72,18 @@ class UpdateBooksCommand extends Command
         // 2/ Get all books from googleAPI which are not in database
         $books = $this->bookUploader->getAllBooks($authors);
 
-        $output->writeln(count($books).' books (not saved)');
+        $output->writeln(count($books) . ' books (not saved)');
 
         // 3/ Save books in database
-        foreach ($books as $bookToSave)
-        {
+        foreach ($books as $bookToSave) {
             if ($this->canSaveBooksSpecification->isSatisfiedBy($bookToSave)) {
                 $this->createBookUseCase->create($bookToSave);
             }
         }
 
         // 4/ Send user subscribers
-            $event = new GenericEvent($date);
-            $this->eventDispatcher->dispatch($event,Events::NEW_BOOK_NOTIFY);
+        $event = new GenericEvent($date);
+        $this->eventDispatcher->dispatch($event, Events::NEW_BOOK_NOTIFY);
 
         return 1;
     }

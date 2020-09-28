@@ -19,13 +19,13 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $authors = [
-                    "Delphine de Vigan",
-                    "Mary Higgins Clark",
-                    "Guillaume Musso",
-                    "Marc Levy",
-                    "Gillian Flynn",
-                    "Anna Gavalda"
-                    ];
+            'Delphine de Vigan',
+            'Mary Higgins Clark',
+            'Guillaume Musso',
+            'Marc Levy',
+            'Gillian Flynn',
+            'Anna Gavalda',
+        ];
 
         foreach ($authors as $authorToAdd) {
             $author = new Author();
@@ -34,7 +34,5 @@ class AppFixtures extends Fixture
         }
 
         $manager->flush();
-
-    
     }
 }

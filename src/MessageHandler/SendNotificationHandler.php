@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\MessageHandler;
-
 
 use App\Message\SendNotification;
 use App\Service\Mailer\MailerService;
@@ -10,7 +8,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class SendNotificationHandler implements MessageHandlerInterface
 {
-
     /**
      * @var MailerService
      */

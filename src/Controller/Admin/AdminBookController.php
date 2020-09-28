@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminBookController extends AbstractController
 {
-
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -50,15 +49,16 @@ class AdminBookController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($author);
             $this->em->flush();
+
             return $this->redirectToRoute('admin_book');
         }
 
         return $this->render('admin/book/create.html.twig',
             [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]);
     }
 
@@ -71,16 +71,17 @@ class AdminBookController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($book);
             $this->em->flush();
+
             return $this->redirectToRoute('admin_book');
         }
 
         return $this->render('admin/book/edit.html.twig',
             [
                 'form' => $form->createView(),
-                'book' => $book
+                'book' => $book,
             ]);
     }
 

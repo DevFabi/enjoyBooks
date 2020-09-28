@@ -10,7 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SubscriptionFormType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,7 +21,7 @@ class SubscriptionFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Author::class,
-            'validation_groups' => ["create"]
+            'validation_groups' => ['create'],
         ]);
     }
 }

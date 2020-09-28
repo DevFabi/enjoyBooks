@@ -20,7 +20,6 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
-
     /**
      * @var RouterInterface
      */
@@ -45,9 +44,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->em = $em;
     }
+
     public function supports(Request $request)
     {
-        return $request->attributes->get('_route') === 'login'
+        return 'login' === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
@@ -93,7 +93,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getLoginUrl()
     {

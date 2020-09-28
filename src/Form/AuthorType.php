@@ -16,9 +16,9 @@ class AuthorType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Author name',
                 'attr' => [
-                    'placeholder' => 'Write author name'
-                ]
-            ] )
+                    'placeholder' => 'Write author name',
+                ],
+            ])
         ;
     }
 
@@ -26,7 +26,7 @@ class AuthorType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Author::class,
-            'validation_groups' => ["search"]
+            'validation_groups' => ['search'],
         ]);
     }
 }

@@ -40,6 +40,5 @@ class AdminAuthorControllerTest extends WebTestCase
         $crawler = $client->submit($form);
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
     }
 }

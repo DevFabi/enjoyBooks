@@ -16,7 +16,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     message="This email already exist"
  * )
  */
-
 class User implements UserInterface
 {
     /**
@@ -200,7 +199,7 @@ class User implements UserInterface
 
     public function __toString()
     {
-       return $this->getEmail();
+        return $this->getEmail();
     }
 
     public function getFirstName(): ?string
@@ -257,5 +256,4 @@ class User implements UserInterface
 
         return $this;
     }
-
 }

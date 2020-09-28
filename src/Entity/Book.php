@@ -146,6 +146,6 @@ class Book
      */
     public function onPrePersist()
     {
-        $this->added = new DateTime("now");
+        $this->added = new DateTime('now');
     }
 }

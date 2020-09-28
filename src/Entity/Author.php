@@ -142,5 +142,4 @@ class Author
     {
         return $this->getName();
     }
-
 }

@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use App\Service\Books\GetListOfBooks;
 use App\Entity\Author;
-use App\Entity\Book;
 use App\Form\AuthorType;
-use App\Service\BookUploader\GoogleBookUploader;
-use App\Specifications\CanSaveBooksSpecification;
+use App\Service\Books\GetListOfBooks;
 use Doctrine\ORM\EntityManagerInterface;
 use Elastica\Client;
+use Elastica\Query;
+use Elastica\Query\BoolQuery;
+use Elastica\Query\Match;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,9 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Elastica\Query;
-use Elastica\Query\BoolQuery;
-use Elastica\Query\Match;
 
 class BookController extends AbstractController
 {
@@ -62,7 +59,7 @@ class BookController extends AbstractController
     public function listBooksByAuthor($authorId, Request $request, PaginatorInterface $paginator): Response
     {
         $data = $this->listOfBooks->getBookByAuthors($authorId);
-        
+
         $books = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
@@ -70,7 +67,7 @@ class BookController extends AbstractController
         );
 
         return $this->render('book/index.html.twig', [
-            'books' => $books
+            'books' => $books,
         ]);
     }
 
@@ -85,30 +82,29 @@ class BookController extends AbstractController
         $form = $this->createForm(AuthorType::class, $author);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
-          
+        if ($form->isSubmitted() && $form->isValid()) {
             $match = new Match();
             $match->setFieldQuery('author', $author->getName());
 
             $match->setFieldFuzziness('author', '2')
-                  ->setFieldMinimumShouldMatch('author', '100%');
+                ->setFieldMinimumShouldMatch('author', '100%');
 
             $bool = new BoolQuery();
             $bool->addMust($match);
 
             $elasticaQuery = new Query($bool);
             $foundBooks = $client->getIndex('book')->search($elasticaQuery);
-         
+
             $books = [];
 
             foreach ($foundBooks as $book) {
                 $books[] = $book->getSource();
             }
-        }   
+        }
 
         return $this->render('book/search.html.twig', [
             'form' => $form->createView(),
-            'books' => $books
+            'books' => $books,
         ]);
     }
 
@@ -116,17 +112,16 @@ class BookController extends AbstractController
      * @Route("/searchBooksBis", name="searchBooksBis")
      * @IsGranted("ROLE_USER")
      */
-    public function searchBooksBis(Request $request,Client $client): Response
+    public function searchBooksBis(Request $request, Client $client): Response
     {
         $books = [];
         $form = $this->createFormBuilder()->add('text', TextType::class)->getForm();
         $form->handleRequest($request);
 
         $result = $form->getData();
-        if ($form->isSubmitted() && $form->isValid()){
-
+        if ($form->isSubmitted() && $form->isValid()) {
             $match = new Query\MultiMatch();
-            $match->setFields(['title','author'])->setQuery($result['text']);
+            $match->setFields(['title', 'author'])->setQuery($result['text']);
 
             $match->setFuzziness('2');
             $match->setMinimumShouldMatch('100%');
@@ -146,8 +141,7 @@ class BookController extends AbstractController
 
         return $this->render('book/searchBis.html.twig', [
             'form' => $form->createView(),
-            'books' => $books
+            'books' => $books,
         ]);
     }
-
 }

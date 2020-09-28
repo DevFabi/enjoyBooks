@@ -21,6 +21,7 @@ class BookRepository extends ServiceEntityRepository
 
     /**
      * @param $date
+     *
      * @return mixed
      */
     public function findByAddedDate($date)
@@ -32,5 +33,4 @@ class BookRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Elasticsearch;
 
 use App\Entity\Book;
@@ -9,7 +8,6 @@ use App\UseCases\GetAllApiBooks;
 use Elastica\Client;
 use Elastica\Document;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
 
 class BookIndexer
 {
@@ -38,7 +36,7 @@ class BookIndexer
                 'image' => $book->getImage(),
                 'publishedDate' => $book->getPublishedDate(),
             ],
-            "book" // Types are deprecated, to be removed in Elastic 7
+            'book' // Types are deprecated, to be removed in Elastic 7
         );
     }
 

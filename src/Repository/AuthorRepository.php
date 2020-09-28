@@ -27,5 +27,4 @@ class AuthorRepository extends ServiceEntityRepository
             ->getResult()
             ;
     }
-
 }

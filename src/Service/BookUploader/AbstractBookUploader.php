@@ -1,8 +1,8 @@
 <?php
-declare(strict_types= 1);
+
+declare(strict_types=1);
 
 namespace App\Service\BookUploader;
-
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -34,7 +34,7 @@ abstract class AbstractBookUploader implements BookUploaderInterface
             'printType' => 'books',
             'projection' => 'lite',
             'langRestrict' => 'fr',
-            'key' => $this->key
+            'key' => $this->key,
         ];
 
         return sprintf('%s?q=inauthor:%s&%s', $this->url, str_replace(' ', '+', $authorName), http_build_query($data));
@@ -45,7 +45,7 @@ abstract class AbstractBookUploader implements BookUploaderInterface
         $data = [
             'projection' => 'lite',
             'langRestrict' => 'fr',
-            'key' => $this->key
+            'key' => $this->key,
         ];
 
         return sprintf('%s?q=%s&%s', $this->url, $volumeId, http_build_query($data));

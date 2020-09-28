@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\UseCases;
-
 
 use App\Entity\ReadBooks;
 use App\Factory\ReadBookCreator;
@@ -21,11 +19,11 @@ class AddUserReadBookUseCase
 
     public function create($user, $book)
     {
-        $readBook= [];
+        $readBook = [];
 
         $ifAlreadyExist = $this->em->getRepository(ReadBooks::class)->findOneBy(['User' => $user, 'Book' => $readBook]);
-        
-        if ($ifAlreadyExist === null) {
+
+        if (null === $ifAlreadyExist) {
             $readBook['user'] = $user;
             $readBook['book'] = $book;
             $this->readBookCreator->create($readBook);

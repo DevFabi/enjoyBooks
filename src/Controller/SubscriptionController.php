@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller;
-
 
 use App\Entity\Author;
 use App\Form\SubscriptionFormType;
@@ -17,7 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SubscriptionController extends AbstractController
 {
-
     /**
      * @var GetUserSubscriptionService
      */
@@ -48,8 +45,8 @@ class SubscriptionController extends AbstractController
         $authors = $this->em->getRepository(Author::class)->findAll();
 
         return $this->render('subscription/subscription.html.twig',
-                                   ["subscriptions" => $subscriptions,
-                                    "authors" => $authors]);
+            ['subscriptions' => $subscriptions,
+                'authors' => $authors,]);
     }
 
     /**
@@ -66,7 +63,7 @@ class SubscriptionController extends AbstractController
             $user = $this->getUser();
 
             $ifAuthorExist = $this->em->getRepository(Author::class)->findOneBy(['name' => $author->getName()]);
-            if ($ifAuthorExist == null) {
+            if (null == $ifAuthorExist) {
                 $this->em->persist($author);
                 $this->em->flush();
             }
@@ -77,8 +74,7 @@ class SubscriptionController extends AbstractController
         }
 
         return $this->render('subscription/formsubscription.html.twig', [
-            'subscriptionForm' => $form->createView()
+            'subscriptionForm' => $form->createView(),
         ]);
     }
-
 }

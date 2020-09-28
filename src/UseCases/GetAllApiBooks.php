@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\UseCases;
-
 
 use App\Entity\Author;
 use App\Entity\Book;
@@ -11,12 +9,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GetAllApiBooks
 {
-
     const KEYWORD = [
         'Katherine Pancol',
         'Michel Bussi',
         'Valérie Perrin',
-        'Joël Dicker'
+        'Joël Dicker',
     ];
 
     private $uploader;
@@ -35,11 +32,12 @@ class GetAllApiBooks
             $response = $this->callGoogleApi($keyword);
             foreach ($response as $item) {
                 $itemBook = $this->normalize($item);
-                if ($itemBook != null) {
+                if (null != $itemBook) {
                     $books[] = $itemBook;
                 }
             }
         }
+
         return $books;
     }
 
@@ -59,20 +57,22 @@ class GetAllApiBooks
     {
         $book = new Book();
 
-        if(!key_exists("imageLinks",$item["volumeInfo"]) || !key_exists("description",$item["volumeInfo"]) || !key_exists("authors",$item["volumeInfo"])){ return null;}
+        if (!key_exists('imageLinks', $item['volumeInfo']) || !key_exists('description', $item['volumeInfo']) || !key_exists('authors', $item['volumeInfo'])) {
+            return null;
+        }
         $book
-            ->setVolumeId($item["id"])
-            ->setTitle($item["volumeInfo"]["title"])
-            ->setImage($item["volumeInfo"]["imageLinks"]["thumbnail"]);
+            ->setVolumeId($item['id'])
+            ->setTitle($item['volumeInfo']['title'])
+            ->setImage($item['volumeInfo']['imageLinks']['thumbnail']);
 
-        foreach ($item["volumeInfo"]["authors"] as $author) {
+        foreach ($item['volumeInfo']['authors'] as $author) {
             $foundAuthor = new Author();
             $foundAuthor->setName($author);
             $book->setAuthors($foundAuthor);
             continue;
         }
-        if (key_exists("publishedDate",$item["volumeInfo"])){
-            $book->setPublishedDate(new \DateTime($item["volumeInfo"]["publishedDate"]));
+        if (key_exists('publishedDate', $item['volumeInfo'])) {
+            $book->setPublishedDate(new \DateTime($item['volumeInfo']['publishedDate']));
         }
 
         return $book;

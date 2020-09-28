@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller\Admin;
 
 use App\Entity\Author;
@@ -14,7 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminAuthorController extends AbstractController
 {
-
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -51,15 +49,16 @@ class AdminAuthorController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($author);
             $this->em->flush();
+
             return $this->redirectToRoute('admin_author');
         }
 
         return $this->render('admin/author/create.html.twig',
             [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]);
     }
 
@@ -72,16 +71,17 @@ class AdminAuthorController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($author);
             $this->em->flush();
+
             return $this->redirectToRoute('admin_author');
         }
 
         return $this->render('admin/author/edit.html.twig',
             [
                 'form' => $form->createView(),
-                'author' => $author
+                'author' => $author,
             ]);
     }
 

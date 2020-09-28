@@ -12,10 +12,9 @@ use Psr\Log\LoggerInterface;
 
 class AddSubscriptionServiceTest extends TestCase
 {
-
     public function testAddSubscription()
     {
-        $data['author'] = "Delphine de Vigan";
+        $data['author'] = 'Delphine de Vigan';
 
         $user = new User();
         $user->setEmail('tutu@gmail.com')->setPassword('xxx');
@@ -32,7 +31,7 @@ class AddSubscriptionServiceTest extends TestCase
 
         $log = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
 
-        $addSubscription = new AddSubscriptionService($em,$log);
+        $addSubscription = new AddSubscriptionService($em, $log);
 
         $addSubscription->addSubscription($user, $data);
 

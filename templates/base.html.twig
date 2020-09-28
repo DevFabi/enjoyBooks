@@ -11,23 +11,25 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 {% endblock %}
-<body>
-<div class="ebnavbartop">
-    <a class="col-md-3 col-lg-2 mr-0 px-3"<span id="logo"> Enjoybooks </span></a>
-    <button class="navbar-toggler position-absolute d-md-none" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <ul class="navbar-nav px-3">
+    <body>
+    <div class="ebnavbartop">
+        <a class="col-md-3 col-lg-2 mr-0 px-3"><span id="logo"> Enjoybooks </span></a>
+        <button class="navbar-toggler position-absolute d-md-none" type="button" data-toggle="collapse"
+                data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav px-3">
 
-    {% if app.user %}
+            {% if app.user %}
         <li class="eb-nav-item text-nowrap">
             <a class="eb-nav-link"  href="{{ path('logout') }}">Se déconnecter</a>
         </li>
         {% else %}
-        <li class="eb-nav-item text-nowrap"></li>
+        <li class="eb-nav-item text-nowrap">
             <a class="eb-nav-link" href="{{ path('login') }}">Connexion</a>
         </li>
-        <li class="eb-nav-item text-nowrap"></li>
+        <li class="eb-nav-item text-nowrap">
             <a class="eb-nav-link" href="{{ path('register') }}">S'inscrire</a>
         </li>
     {% endif %}

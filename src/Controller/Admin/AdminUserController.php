@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller\Admin;
-
 
 use App\Entity\User;
 use App\Form\AccountType;
@@ -16,7 +14,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminUserController extends AbstractController
 {
-
     private $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -53,11 +50,12 @@ class AdminUserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $hash = $encoder->encodePassword($user, $user->getPassword());
             $user->setPassword($hash);
             $this->em->persist($user);
             $this->em->flush();
+
             return $this->redirectToRoute('admin_user');
         }
 
@@ -75,15 +73,16 @@ class AdminUserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($user);
             $this->em->flush();
+
             return $this->redirectToRoute('admin_user');
         }
 
-        return $this->render('admin/user/edit.html.twig',[
+        return $this->render('admin/user/edit.html.twig', [
             'form' => $form->createView(),
-            'user' => $user
+            'user' => $user,
         ]);
     }
 }

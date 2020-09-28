@@ -22,22 +22,19 @@ class AccountType extends AbstractType
             ->add('password', PasswordType::class)
             ->add('passwordConfirm', PasswordType::class)
         ;
-        if (in_array('admin_edit', $options['validation_groups'] ))
-        {
+        if (in_array('admin_edit', $options['validation_groups'])) {
             $builder
                 ->remove('email')
                 ->add('email', EmailType::class, ['disabled' => true])
                 ->remove('password')
                 ->remove('passwordConfirm');
         }
-        if (in_array('user_edit', $options['validation_groups'] ))
-        {
+        if (in_array('user_edit', $options['validation_groups'])) {
             $builder
                 ->remove('password')
                 ->remove('passwordConfirm');
         }
-        if (in_array('registration', $options['validation_groups'] ))
-        {
+        if (in_array('registration', $options['validation_groups'])) {
             $builder
                 ->remove('subscriptions');
         }
@@ -47,7 +44,7 @@ class AccountType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'validation_groups' => ['default','admin_edit', 'admin_create', 'user_edit', 'registration']
+            'validation_groups' => ['default', 'admin_edit', 'admin_create', 'user_edit', 'registration'],
         ]);
     }
 }

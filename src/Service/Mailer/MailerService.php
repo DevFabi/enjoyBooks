@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Service\Mailer;
-
 
 use App\Message\SendNotification;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -36,9 +33,8 @@ class MailerService
             ->html('<h1>Notification</h1><p>'.$notification->getMessage().'</p>');
 
         $this->mailer->send($email);
-        $this->logger->info('Email send to :'. $user->getEmail());
+        $this->logger->info('Email send to :' . $user->getEmail());
 
         return $email;
     }
-
 }

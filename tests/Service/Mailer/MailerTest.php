@@ -23,6 +23,5 @@ class MailerTest extends TestCase
 
         $this->assertSame('New content', $email->getSubject());
         $this->assertCount(1, $email->getTo());
-
     }
 }

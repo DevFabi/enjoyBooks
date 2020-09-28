@@ -1,0 +1,16 @@
+<?php
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        'array_syntax' => ['syntax' => 'short'],
+    ])
+    ->setFinder(
+        PhpCsFixer\Finder::create()
+            ->exclude('vendor')
+            ->exclude('var')
+            ->exclude('public')
+            ->exclude('bin')
+            ->in(__DIR__)
+    )
+;

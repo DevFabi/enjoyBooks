@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Service\BookUploader;
-
 
 use App\Entity\Book;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,12 +15,11 @@ class GoogleBookUploader extends AbstractBookUploader
         parent::__construct($url, $key, $client, $em);
     }
 
-    public function getAllBooks(Array $authors) : array
+    public function getAllBooks(array $authors): array
     {
-
         $books = [];
 
-        foreach ($authors as $author){
+        foreach ($authors as $author) {
             $url = $this->createUrl($author->getName());
 
             $response = $this->client->request(
@@ -31,10 +29,10 @@ class GoogleBookUploader extends AbstractBookUploader
 
             $response = json_decode($response->getContent(), true);
 
-            foreach ($response["items"] as $book) {
+            foreach ($response['items'] as $book) {
                 // Search if id exist il database
-                $ifBookExist = $this->em->getRepository(Book::class)->findOneBy(['volumeId' => $book["id"]]);
-                if ($ifBookExist === null){
+                $ifBookExist = $this->em->getRepository(Book::class)->findOneBy(['volumeId' => $book['id']]);
+                if (null === $ifBookExist) {
                     $books[] = $book;
                 }
             }

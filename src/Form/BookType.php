@@ -17,7 +17,7 @@ class BookType extends AbstractType
     {
         $builder
             ->add('publishedDate', DateType::class, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
             ])
             ->add('description', TextareaType::class)
             ->add('title', TextType::class)

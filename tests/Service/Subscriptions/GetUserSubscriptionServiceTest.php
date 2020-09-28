@@ -11,10 +11,8 @@ use PHPUnit\Framework\TestCase;
 
 class GetUserSubscriptionServiceTest extends TestCase
 {
-
     public function testGetUserSubscriptions()
     {
-
         $author = new Author();
         $author->setName('Marc Levy');
 
@@ -31,7 +29,6 @@ class GetUserSubscriptionServiceTest extends TestCase
         $getUserSubcriptionService = new GetUserSubscriptionService($em);
         $subscriptions = $getUserSubcriptionService->getUserSubscriptions(12);
 
-        $this->assertEquals($subscriptions[0]->getName(), 'Marc Levy' );
-
+        $this->assertEquals($subscriptions[0]->getName(), 'Marc Levy');
     }
 }

@@ -28,7 +28,6 @@ class AuthorController extends AbstractController
         $authors = $this->em->getRepository(Author::class)->findAll();
 
         return $this->render('author/index.html.twig',
-                                    ["authors" => $authors]);
+            ['authors' => $authors]);
     }
-
 }

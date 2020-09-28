@@ -10,19 +10,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class GoogleController extends AbstractController
 {
     /**
-     * Link to this controller to start the "connect" process
-     * @param ClientRegistry $clientRegistry
+     * Link to this controller to start the "connect" process.
      *
      * @Route("/connect/google", name="connect_google_start")
-     *
-     * @return RedirectResponse
      */
     public function connectAction(ClientRegistry $clientRegistry): RedirectResponse
     {
         return $clientRegistry
             ->getClient('google')
             ->redirect([
-                'profile', 'email'
+                'profile', 'email',
             ])
             ;
     }
@@ -30,8 +27,7 @@ class GoogleController extends AbstractController
     /**
      * After going to Google, you're redirected back here
      * because this is the "redirect_route" you configured
-     * in config/packages/knpu_oauth2_client.yaml
-     *
+     * in config/packages/knpu_oauth2_client.yaml.
      *
      * @Route("/connect/google/check", name="connect_google_check")
      */
